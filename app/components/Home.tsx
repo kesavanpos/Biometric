@@ -29,10 +29,7 @@ const HomeScreen : React.FC<IUserModel> = ({ navigation,props }) => {
 const checkBiometry = () =>{
   TouchID.isSupported()
       .then(biometryType => {
-        console.log(biometryType);
-        
         setBiometryType(biometryType);
-
         // Success code
         if (biometryType === 'FaceID') {
           console.log('FaceID is supported.');
@@ -42,7 +39,7 @@ const checkBiometry = () =>{
         } else if (biometryType === true) {
       	  // Touch ID is supported on Android
 	}
-      })
+  })
   .catch(error => {
     // Failure code if the user's device does not have touchID or faceID enabled
     console.log(error);
@@ -60,13 +57,33 @@ const pressHandler = () => {
 }
 
 const submitData = () => {    
-  compDispatch(loginUser({login:{username:username,password:password}}));
-  configureStore.subscribe(() =>{    
+
+  fetch('LOGIN API URL',{
+    method: 'post',
+    headers:{
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },  
+    body: JSON.stringify({
+      email:username,
+      password: password
+    }),
+  })
+  .then(response =>{
+    if(response.status >= 200 && response.status < 300)
+    {
+      compDispatch(loginUser({login:{username:username,password:password}}));
+      configureStore.subscribe(() =>{    
       const objState =  configureStore.getState();    
-      if(objState.isAuthenticated == false)
-      {
-        checkBiometry();
-      }
+        if(objState.isAuthenticated == false)
+        {
+          checkBiometry();
+        }
+      })
+    }
+    else{
+      
+    }
   })
 }
   
