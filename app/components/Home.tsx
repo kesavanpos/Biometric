@@ -1,5 +1,5 @@
 import React,{useState } from 'react';
-import { AlertAndroid, Button, View,TextInput,StyleSheet,Text,TouchableOpacity } from 'react-native';
+import { AlertAndroid, Button, View,TextInput,StyleSheet,Text,TouchableOpacity,SafeAreaView } from 'react-native';
 import {connect} from 'react-redux';
 //import { login } from "../services/api";
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { loginUser } from "../redux/store/actions/useractions";
 import configureStore from "../../app/redux/store/store";
 import TouchID from 'react-native-touch-id'
+import WebView from 'react-native-webview';
 
 const HomeScreen : React.FC<IUserModel> = ({ navigation,props }) => {
   
@@ -88,34 +89,43 @@ const submitData = () => {
 }
   
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Biometric</Text>
-      <View style={styles.inputView}>
-          <TextInput 
-              style={styles.inputText}
-              placeholder="Email."
-              placeholderTextColor="#003f5c"
-              onChangeText={(username) => setUserName(username)}
-          />
-      </View>
-      <View style={styles.inputView}>
-          <TextInput 
-              style={styles.inputText}
-              placeholder="password"
-              placeholderTextColor="#003f5c"
-              onChangeText={(password) => setUserName(password)}
-          />
-      </View>
+    <>
+    <SafeAreaView style={styles.flexContainer}>
+        <WebView source={{ uri: 'https://bhaco.enqbator.com/secure' }} />
+    </SafeAreaView>
+    </>
 
-      <TouchableOpacity style={styles.loginBtn}
-        onPress={submitData}>
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity>
-    </View>
+    // <View style={styles.container}>
+    //   <Text style={styles.logo}>Biometric</Text>
+    //   <View style={styles.inputView}>
+    //       <TextInput 
+    //           style={styles.inputText}
+    //           placeholder="Email."
+    //           placeholderTextColor="#003f5c"
+    //           onChangeText={(username) => setUserName(username)}
+    //       />
+    //   </View>
+    //   <View style={styles.inputView}>
+    //       <TextInput 
+    //           style={styles.inputText}
+    //           placeholder="password"
+    //           placeholderTextColor="#003f5c"
+    //           onChangeText={(password) => setPassword(password)}
+    //       />
+    //   </View>
+
+    //   <TouchableOpacity style={styles.loginBtn}
+    //     onPress={submitData}>
+    //       <Text style={styles.loginText}>LOGIN</Text>
+    //     </TouchableOpacity>
+    // </View>
   );
 }
 
 const styles = StyleSheet.create({
+  flexContainer: {
+    flex: 1
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
